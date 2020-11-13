@@ -1,4 +1,4 @@
-FROM debian:10.2 as dcraw-build
+FROM debian:10.6 as dcraw-build
 
 RUN apt update
 RUN apt install -y gcc wget libjpeg62-turbo-dev
