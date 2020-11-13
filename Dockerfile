@@ -8,6 +8,6 @@ RUN mkdir -p /opt/dcraw/src; \
     mkdir -p /opt/dcraw/bin
 RUN gcc -o /opt/dcraw/bin/dcraw -static -O4 -D NO_JASPER -D NO_LCMS /opt/dcraw/src/dcraw.c -lm -ljpeg
 
-FROM docker.io/library/openjdk:11-slim as target
+FROM docker.io/library/openjdk:11.0.9-slim as target
 COPY --from=dcraw-build /opt/dcraw/bin/dcraw /opt/bin/dcraw
 ENV PATH="/opt/bin:${PATH}"
