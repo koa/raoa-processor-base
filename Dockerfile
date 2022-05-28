@@ -8,5 +8,11 @@ RUN mkdir -p /opt/dcraw/src; \
     mkdir -p /opt/dcraw/bin
 RUN gcc -o /opt/dcraw/bin/dcraw -static -O4 -D NO_JASPER -D NO_LCMS /opt/dcraw/src/dcraw.c -lm -ljpeg
 
-FROM gcr.io/distroless/java:11 as target
+FROM docker.io/jrottenberg/ffmpeg:4.1-scratch as ffmpeg-source
+
+FROM eclipse-temurin:17-jre as target
+
 COPY --from=dcraw-build /opt/dcraw/bin/dcraw /usr/bin/dcraw
+
+COPY --from=ffmpeg-source / /
+
