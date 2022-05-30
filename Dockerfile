@@ -10,7 +10,7 @@ RUN gcc -o /opt/dcraw/bin/dcraw -static -O4 -D NO_JASPER -D NO_LCMS /opt/dcraw/s
 
 FROM docker.io/jrottenberg/ffmpeg:4.1-scratch as ffmpeg-source
 
-FROM eclipse-temurin:17-jre as target
+FROM gcr.io/distroless/java17-debian11 as target
 
 COPY --from=dcraw-build /opt/dcraw/bin/dcraw /usr/bin/dcraw
 
