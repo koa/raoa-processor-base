@@ -1,18 +1,21 @@
-FROM debian:10.6 as dcraw-build
+FROM debian:12.11 as dcraw-build
 
-RUN apt-get update && apt-get -y upgrade
-RUN apt install -y gcc wget libjpeg62-turbo-dev
+RUN apt-get update && apt-get -y upgrade && apt install -y gcc wget libjpeg62-turbo-dev libva-drm2 libva2 i965-va-driver
 
 RUN mkdir -p /opt/dcraw/src; \
     wget http://www.dechifro.org/dcraw/dcraw.c -O /opt/dcraw/src/dcraw.c; \
     mkdir -p /opt/dcraw/bin
 RUN gcc -o /opt/dcraw/bin/dcraw -static -O4 -D NO_JASPER -D NO_LCMS /opt/dcraw/src/dcraw.c -lm -ljpeg
 
-FROM docker.io/jrottenberg/ffmpeg:4.1-scratch as ffmpeg-source
+FROM docker.io/jrottenberg/ffmpeg:4.4-vaapi as ffmpeg-source
 
-FROM gcr.io/distroless/java17-debian11 as target
+FROM gcr.io/distroless/java21-debian12 as target
+
+ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
 COPY --from=dcraw-build /opt/dcraw/bin/dcraw /usr/bin/dcraw
 
-COPY --from=ffmpeg-source / /
+COPY --from=ffmpeg-source /usr/local /usr/local/
+COPY --from=ffmpeg-source /usr/lib/x86_64-linux-gnu/libva* /usr/lib/x86_64-linux-gnu/
+COPY --from=ffmpeg-source /usr/lib/x86_64-linux-gnu/libdrm* /usr/lib/x86_64-linux-gnu/
 
