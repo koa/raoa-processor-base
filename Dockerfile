@@ -20,3 +20,7 @@ COPY --from=dcraw-build /opt/dcraw/bin/dcraw /usr/bin/dcraw
 COPY --from=ffmpeg-source /usr/local /usr/local/
 COPY --from=ffmpeg-source /usr/lib/x86_64-linux-gnu/libssl.so.3 /usr/lib/x86_64-linux-gnu/
 COPY --from=ffmpeg-source /usr/lib/x86_64-linux-gnu/libcrypto.so.3 /usr/lib/x86_64-linux-gnu/
+RUN echo "LC_ALL=en_US.UTF-8" >> /etc/environment
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+RUN echo "LANG=en_US.UTF-8" > /etc/locale.conf
+RUN locale-gen en_US.UTF-8
