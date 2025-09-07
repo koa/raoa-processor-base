@@ -11,7 +11,7 @@ FROM docker.io/jrottenberg/ffmpeg:7.1.1-vaapi2404 as ffmpeg-source
 
 FROM ubuntu:24.04 as target
 
-RUN apt-get update && apt-get -y upgrade && apt install -y openjdk-21-jre-headless locales libimage-exiftool-perl libgl1-mesa-dri && apt-get clean
+RUN apt-get update && apt-get -y upgrade && apt install -y openjdk-21-jre-headless locales libimage-exiftool-perl libgl1-mesa-dri libva-drm2 vainfo && apt-get clean
 
 ENV LD_LIBRARY_PATH=/usr/local/lib:/usr/local/lib64
 
